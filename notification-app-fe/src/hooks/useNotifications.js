@@ -4,6 +4,8 @@ import { fetchNotifications } from "../apis/notifications";
 export function useNotifications() {
   const [notifications, setNotifications] = useState([]);
   const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -14,7 +16,13 @@ export function useNotifications() {
     load();
   }, [notifications]);
 
-  const totalPages = 0;
+  const totalPages = 1;
 
-  return { notifications, total, totalPages, loading: false, error: true };
+  return {
+    notifications,
+    total,
+    totalPages,
+    loading,
+    error,
+  };
 }
