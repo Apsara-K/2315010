@@ -501,3 +501,94 @@ AND createdAt >= NOW() - INTERVAL 7 DAY;
 ```
 
 ---
+
+# Stage 4
+
+## Problem
+
+Right now, notifications are loaded from the database every time a user opens or refreshes the page. If many users use the application at the same time, the database receives too many requests. This makes the application slower and gives users a poor experience.
+
+---
+
+## Solution 1: Pagination
+
+Instead of loading all notifications at once, load only a small number of notifications on each page (for example, 10 notifications).
+
+### Advantages
+
+- Reduces the amount of data loaded.
+- Faster page loading.
+- Reduces database workload.
+
+### Trade-offs
+
+- Users have to move to the next page to see older notifications.
+
+---
+
+## Solution 2: Caching
+
+Store frequently used notifications in a cache like Redis. When the user requests notifications, the application first checks the cache before accessing the database.
+
+### Advantages
+
+- Faster response.
+- Fewer database queries.
+- Better overall performance.
+
+### Trade-offs
+
+- Extra memory is required.
+- Cache needs to be updated whenever notifications change.
+
+---
+
+## Solution 3: Real-Time Notifications
+
+Use Socket.IO or WebSockets to send new notifications directly to users instead of checking the database repeatedly.
+
+### Advantages
+
+- Users receive notifications instantly.
+- Reduces unnecessary API requests.
+- Improves user experience.
+
+### Trade-offs
+
+- Slightly more difficult to implement.
+- Requires maintaining socket connections.
+
+---
+
+## Solution 4: Database Indexing
+
+Create indexes on columns that are searched often, such as `studentID`, `isRead`, and `createdAt`.
+
+### Advantages
+
+- Faster searching and sorting.
+- Improves database performance.
+
+### Trade-offs
+
+- Uses extra storage.
+- Insert and update operations become slightly slower.
+
+---
+
+## Solution 5: Lazy Loading
+
+Load only the first few notifications when the page opens. Load more notifications only when the user scrolls down or clicks "Load More".
+
+### Advantages
+
+- Faster initial page load.
+- Less data is fetched from the database.
+- Better user experience.
+
+### Trade-offs
+
+- Requires a little more frontend development.
+
+---
+
