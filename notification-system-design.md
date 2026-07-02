@@ -592,3 +592,66 @@ Load only the first few notifications when the page opens. Load more notificatio
 
 ---
 
+# Stage 5
+
+## Problems in the Current Implementation
+
+The current implementation processes each student one by one. For every student, it sends an email, saves the notification to the database, and pushes the notification to the app.
+
+This approach has a few problems:
+
+- It takes a long time to notify all 50,000 students.
+- If sending an email fails for one student, the remaining students may have to wait.
+- The whole process becomes slow because every task is performed one after another.
+- If the application crashes in the middle, some students may receive notifications while others do not.
+
+---
+
+## What would I change?
+
+Instead of processing each student one by one, I would use a message queue.
+
+The application first stores all notification requests in the queue. Worker processes then handle sending emails, saving notifications, and pushing notifications to the app in the background.
+
+This allows many notifications to be processed at the same time and improves performance.
+
+---
+
+## Should saving to the database and sending email happen together?
+
+No.
+
+These two operations should be handled separately.
+
+The notification should first be saved in the database because it is the main record. Sending the email can happen afterwards in the background.
+
+Even if the email fails, the notification is still available inside the application and the email can be retried later.
+
+---
+
+## Worker Process:
+
+    while queue is not empty:
+
+        request = get next notification
+
+        save notification to database
+
+        send email
+
+        push notification to the application
+```
+
+---
+
+## Advantages
+
+- Faster notification delivery.
+- Handles thousands of students efficiently.
+- Failed emails can be retried later.
+- Database records are always saved.
+- Better performance and reliability.
+
+---
+
+
