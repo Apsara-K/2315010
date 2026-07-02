@@ -266,3 +266,84 @@ notification:new
   "createdAt": "2026-07-02T11:00:00Z"
 }
 ```
+
+# Stage 2
+## Database Choice
+
+I suggest using MySQL as the database for the notification system.
+
+Reasons:
+- Easy to use and learn.
+- Stores data permanently.
+- Supports SQL queries.
+- Good performance for notification data.
+- Can handle large amounts of data.
+
+## Database Schema
+
+Table Name: notifications
+
+
+| Column | Data Type | Description |
+|---------|-----------|-------------|
+| id | INT | Primary Key |
+| title | VARCHAR(255) | Notification title |
+| message | TEXT | Notification message |
+| is_read | BOOLEAN | Read status |
+| created_at | DATETIME | Created date and time |
+
+```sql
+CREATE TABLE notifications (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255),
+    message TEXT,
+    is_read BOOLEAN DEFAULT FALSE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+## Problems When Data Increases
+
+As the number of notifications increases:
+
+- Searching becomes slower.
+- Fetching notifications takes more time.
+- Database storage increases.
+- Server performance may reduce.
+
+## Solutions
+
+- Use indexes to improve search speed.
+- Delete old notifications regularly.
+- Use pagination to load fewer notifications at a time.
+- Optimize SQL queries.
+
+## get All Notfications
+```sql
+SELECT * FROM notifications;
+```
+
+## Get Notification by ID
+```sql
+SELECT * FROM notifications
+WHERE id = 1;
+```
+
+## Create Notification
+```sql
+INSERT INTO notifications(title, message)
+VALUES('Exam','Exam starts at 9 AM');
+```
+
+## Mark as Read
+```sql
+UPDATE notifications
+SET is_read = TRUE
+WHERE id = 1;
+```
+
+## Delete Notification
+```sql
+DELETE FROM notifications
+WHERE id = 1;
+```
