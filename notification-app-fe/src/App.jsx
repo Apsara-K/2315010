@@ -1,3 +1,5 @@
+import PriorityInbox from "./pages/PriorityInbox";
+
 export default function App() {
-  return "Notifications App";
+  return <PriorityInbox />;
 }
